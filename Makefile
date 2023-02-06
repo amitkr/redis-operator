@@ -75,17 +75,20 @@ docker-build: deps-development
 # Run a shell into the development docker image
 .PHONY: shell
 shell: docker-build
-	docker run -ti --rm -v ~/.kube:/.kube:ro -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) -p $(PORT):$(PORT) $(REPOSITORY)-dev /bin/bash
+	docker run -ti --rm -v ~/.kube:/.kube:ro -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) -p $(PORT):$(PORT) $(REPOSITORY)-dev /bin/bash
 
 # Build redis-failover executable file
 .PHONY: build
 build: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev ./scripts/build.sh
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev ./scripts/build.sh
 
 # Run the development environment in the background
 .PHONY: run
 run: docker-build
-	docker run -ti --rm -v ~/.kube:/.kube:ro -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) -p $(PORT):$(PORT) $(REPOSITORY)-dev ./scripts/run.sh
+	docker run -ti --rm -v ~/.kube:/.kube:ro -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) -p $(PORT):$(PORT) $(REPOSITORY)-dev ./scripts/run.sh
 
 # Build the production image based on the public one
 .PHONY: image
@@ -131,7 +134,8 @@ release: tag image-release
 # Test stuff in dev
 .PHONY: unit-test
 unit-test: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(UNIT_TEST_CMD)'
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(UNIT_TEST_CMD)'
 
 .PHONY: ci-unit-test
 ci-unit-test:
@@ -155,22 +159,26 @@ test: ci-unit-test ci-integration-test helm-test
 
 .PHONY: go-generate
 go-generate: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(GO_GENERATE_CMD)'
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(GO_GENERATE_CMD)'
 
 .PHONY: generate
 generate: go-generate
 
 .PHONY: get-deps
 get-deps: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(GET_DEPS_CMD)'
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(GET_DEPS_CMD)'
 
 .PHONY: update-deps
 update-deps: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(UPDATE_DEPS_CMD)'
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(UPDATE_DEPS_CMD)'
 
 .PHONY: mocks
 mocks: docker-build
-	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) --name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(MOCKS_CMD)'
+	docker run -ti --rm -v $(PWD):$(WORKDIR) -u $(UID):$(UID) \
+		--name $(SERVICE_NAME) $(REPOSITORY)-dev /bin/sh -c '$(MOCKS_CMD)'
 
 .PHONY: deps-development
 # Test if the dependencies we need to run this Makefile are installed

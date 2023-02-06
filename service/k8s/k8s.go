@@ -40,7 +40,7 @@ func New(kubecli kubernetes.Interface, crdcli redisfailoverclientset.Interface, 
 		ConfigMap:           NewConfigMapService(kubecli, logger, metricsRecorder),
 		Secret:              NewSecretService(kubecli, logger, metricsRecorder),
 		Pod:                 NewPodService(kubecli, logger, metricsRecorder),
-		PodDisruptionBudget: NewPodDisruptionBudgetService(kubecli, logger, metricsRecorder),
+		PodDisruptionBudget: NewPodDisruptionBudgetService(kubecli, logger, metricsRecorder), // TODO: @amitkr
 		RedisFailover:       NewRedisFailoverService(crdcli, logger, metricsRecorder),
 		Service:             NewServiceService(kubecli, logger, metricsRecorder),
 		RBAC:                NewRBACService(kubecli, logger, metricsRecorder),
